@@ -1,24 +1,37 @@
 {
-  "compilerVersion": "./node_modules/solc",
-  "outputType": "all",
+  // **NOTE:** The compiler version should generally be a standard string like "0.8.20"
+  // The relative path in the original file might be specific to a custom framework setup.
+  "compilerVersion": "0.8.20", 
   "compilerOptions": {
     "outputSelection": {
-      "*": {
+      // Select all contracts from all source files
+      "*": { 
+        // Request specific output artifacts for all contracts
         "*": [
-          "evm.bytecode.object",
-          "evm.deployedBytecode.object",
-          "abi",
-          "evm.bytecode.sourceMap",
-          "evm.deployedBytecode.sourceMap",
-          "metadata"
+          "evm.bytecode.object",          // The main bytecode object (deployment)
+          "evm.deployedBytecode.object",   // The bytecode that ends up on the chain
+          "abi",                           // Application Binary Interface
+          "evm.bytecode.sourceMap",        // Source map for debugging deployment
+          "evm.deployedBytecode.sourceMap",// Source map for debugging on-chain calls
+          "metadata"                       // Contract metadata
         ],
-        "": ["ast"]
+        // Request Abstract Syntax Tree (AST) only for the files themselves, not specific contracts
+        "": [
+          "ast"                            
+        ]
       }
     },
+    // Specify the EVM version to target for compilation.
+    // 'istanbul' is a common choice, but newer versions like 'berlin' or 'london'
+    // may offer better gas efficiency for newer opcodes.
     "evmVersion": "istanbul",
     "optimizer": {
+      // Enable the optimizer for reduced gas cost
       "enabled": true,
-      "runs": 999999
+      // **OPTIMIZATION NOTE:** Reduced runs from 999999 to 10000. 
+      // 999999 is too high, significantly increasing compile time with diminishing returns.
+      // 10000 is a good balance for frequent on-chain calls.
+      "runs": 10000
     }
   }
 }
